@@ -1,0 +1,87 @@
+body {
+    background: linear-gradient(45deg, #000000, #1a1a1a);
+    font-family: 'Orbitron', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    background: rgba(26, 26, 26, 0.9);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+    border: 2px solid #00ff88;
+    max-width: 400px;
+    text-align: center;
+}
+
+.logo {
+    color: #00ff88;
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+.form-group label {
+    color: #00ff88;
+    font-size: 0.9rem;
+}
+
+.form-control {
+    background: #2a2a2a;
+    border: 1px solid #00ff88;
+    border-radius: 5px;
+    color: white;
+}
+
+.form-control:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+button {
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    border: 2px solid #00ff88;
+    color: #00ff88;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+button:hover {
+    background: #00ff88;
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+}
+
+.error-message {
+    color: #ff4444;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    display: none;
+    padding: 0.5rem;
+    background: rgba(255, 68, 68, 0.1);
+    border-radius: 5px;
+}
+
+.register-link {
+    color: #00ff88;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+    text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+}
+
+.register-link:hover {
+    text-decoration: none;
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+    color: #00ff88;
+}
