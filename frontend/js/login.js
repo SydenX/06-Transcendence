@@ -8,6 +8,13 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', async function(event) {
         event.preventDefault();
 
+        const olog = document.getElementById('clicked_button').value;
+        if (olog === '42log') {
+            event.cancelable = true;
+            window.location.href = "/api/users/oauth_login/";   
+            return;
+        }
+
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
 
@@ -45,4 +52,22 @@ document.addEventListener('DOMContentLoaded', function() {
             showError(error.message);
         }
     });
+});
+
+async function olog() {
+    return await fetch('/api/users/oauth_login/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        credentials: 'include',
+        body: JSON.stringify({ username, password })
+    });
+}
+
+document.getElementById('42log').addEventListener('click', function() {
+    window.location.href = "/api/users/oauth_login/";
 });

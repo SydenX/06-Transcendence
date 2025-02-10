@@ -40,17 +40,7 @@ async function attemptLogin(username, password, csrfToken) {
 
     const responseData = await loginResponse.json();
     console.log('Login successful');
-
-    try {
-        const response = await fetch('/api/users/profile/');
-        if (response.ok) {
-            const userData = await response.json();
-            setCookie("username", userData.username);
-            setCookie("avatar", userData.avatar);
-        }
-    } catch (error) {
-        console.error('Error checking auth:', error);
-    }
+    loadLoginInfos();
 	
 	return true;
 }
@@ -64,7 +54,6 @@ function isAuthenticated(){
     checkAuth().then(isAuthenticated => {
         console.log(isAuthenticated);
 		if(isAuthenticated === true){
-			//window.location.href = '/game';
         	return true;
 		}
         return false;

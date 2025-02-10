@@ -23,3 +23,18 @@ function deleteAllCookies() {
         document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
     });
 }
+
+async function loadLoginInfos(){
+    if(getCookie("username") != null)
+        return;
+    try {
+        const response = await fetch('/api/users/profile/');
+        if (response.ok) {
+            const userData = await response.json();
+            setCookie("username", userData.username);
+            setCookie("avatar", userData.avatar);
+        }
+    } catch (error) {
+        console.error('Error checking auth:', error);
+    }
+}

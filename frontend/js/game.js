@@ -1,14 +1,8 @@
-$(document).ready(function() {
-    $("#header-container").load("header.html", function() {
-        $("body").addClass("loaded");
-    });
-});
-
-
 checkAuth().then(isAuthenticated => {
     if(isAuthenticated === false)
         window.location.href = '/login';
     else {
+        loadLoginInfos();
         if (!gameInitialized) {
             if (document.readyState === 'complete') {
                 console.log('DOM is ready, initializing game after auth');

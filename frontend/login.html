@@ -22,8 +22,10 @@
                 <label for="password">Password</label>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
-            <button type="submit" class="btn btn-outline-success">Login</button>
+            <input type="hidden" name="clicked_button" id="clicked_button" value="">
+            <button type="submit" class="btn btn-outline-success" onclick="document.getElementById('clicked_button').value='login'">Login</button>
             <a href="/register" class="register-link">Don't have an account? Register here</a>
+            <button id="42log" class="btn btn-outline-success" onclick="document.getElementById('clicked_button').value='42log'">Login using 42</button>
         </form>
     </div>
 

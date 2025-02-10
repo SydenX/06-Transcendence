@@ -11,7 +11,8 @@ body {
 
 .header {
 	background-color: rgba(0, 0, 0, 0.8);
-	padding: 1rem;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -29,6 +30,7 @@ body {
 	text-decoration: none;
 	font-family: 'Orbitron', sans-serif;
 	transition: all 0.3s ease;
+	margin-left: 10%;
 }
 
 .header-brand:hover {
@@ -41,15 +43,15 @@ body {
 	display: flex;
 	gap: 1rem;
 	align-items: center;
+	margin-right: 10%;
 }
 
 .user-info {
 	display: flex;
 	align-items: center;
-	margin-right: 1rem;
 }
 
-.user-avatar {
+.user-avatar_head {
 	width: 32px;
 	height: 32px;
 	border-radius: 50%;
@@ -59,10 +61,11 @@ body {
 	align-items: center;
 	justify-content: center;
 	font-weight: bold;
+	font-family: 'Orbitron', sans-serif;
 	color: #000;
 }
 
-.username {
+.username_head {
 	color: #00ff88;
 }
 
@@ -92,14 +95,16 @@ body {
 .user-button {
     display: flex;
     align-items: center;
-    padding: 0.5rem 1rem;
+    padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	padding-left: 2rem;
     background-color: #000;
     cursor: pointer;
 	border: #000;
 	position: relative;
 }
 
-.user-avatar {
+.user-avatar_head {
     width: 40px;
     height: 40px;
     background-color: #00ff88;
@@ -109,24 +114,27 @@ body {
     justify-content: center;
     color: #000;
     font-weight: bold;
+	font-size: 1.2rem;
     margin-right: 0.5rem;
 }
 
-#username {
+.username_head {
     color: #00ff88;
-    font-size: 1rem;
+	font-size: 1.2rem;
 }
 
 .dropdown-menu {
     display: none;
     position: absolute;
     top: 100%;
-    left: 0;
+    left: 2rem;
     background-color: #000;
     border: 1px solid #00ff88;
     border-radius: 5px;
     margin-top: 0.5rem;
-    width: auto;
+    width: max-content;
+	font-family: 'Orbitron', sans-serif;
+	font-size: 1rem;
 }
 
 .dropdown-menu ul {
@@ -150,9 +158,27 @@ body {
     color: #000;
 }
 
+.dropdown-menu .logout_head a {
+    color: #dc3545;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-menu .logout_head a:hover {
+    background-color: #dc3545;
+    color: #000;
+}
+
+.dropdown-divider {
+    border: none;
+    height: 1px;
+    background-color: #666; /* Gris */
+    margin: 0.1rem 0; /* Espace autour */
+}
+
+
 @keyframes glow {
 	0% { text-shadow: 0 0 5px #00ff88; }
 	50% { text-shadow: 0 0 20px #00ff88; }
 	100% { text-shadow: 0 0 5px #00ff88; }
 }
-

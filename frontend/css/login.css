@@ -51,7 +51,6 @@ button {
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-bottom: 1rem;
 }
 
 button:hover {
@@ -74,7 +73,8 @@ button:hover {
     color: #00ff88;
     text-decoration: none;
     font-size: 0.9rem;
-    margin-top: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
     display: inline-block;
     transition: all 0.3s ease-in-out;
     text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
