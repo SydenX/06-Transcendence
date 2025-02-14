@@ -1,18 +1,30 @@
-document.addEventListener('DOMContentLoaded', function() {
+function loadRegister(){
+	console.log("Loading register.")
 
-	if(isAuthenticated())
-		return;
+	checkAuth().then(isAuthenticated => {
+        console.log("Is user auth? " + isAuthenticated)
+		if(isAuthenticated == true){
+            window.location.href = "#game";
+            console.log("Already logged-in -> redirecting to game page.")
+        	return;
+		}
+	});
 
-	const form = document.getElementById('registerForm');
+}
+
+function initRegister(){
+	console.log("Initializing register.")
 	
-	form.addEventListener('submit', async function(event) {
-		event.preventDefault();
-		console.log('Form submitted');
+	document.getElementById('register_42log').addEventListener('click', async function(event) {
+        window.location.href = "/api/users/oauth_login/";
+        return;
+    });
+    document.getElementById('register_submit').addEventListener('click', async function(event) {
 
-		const username = document.getElementById('username').value.trim();
-		const email = document.getElementById('email').value;
-		const password = document.getElementById('password').value;
-		const confirm_password = document.getElementById('confirm_password').value;
+		const username = document.getElementById('register_username').value.trim();
+		const email = document.getElementById('register_email').value;
+		const password = document.getElementById('register_password').value;
+		const confirm_password = document.getElementById('register_confirm_password').value;
 		
 		if (password !== confirm_password) {
 			showError('Passwords do not match.');
@@ -55,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (!registerResponse.ok) {
                 const errorText = await registerResponse.text();
-                console.error('Registration Error:', registerResponse.status, errorText);
+                // console.error('Registration Error:', registerResponse.status, errorText);
                 throw new Error(errorText);
             }
 
@@ -64,10 +76,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			const loginResponse = await attemptLogin(username, password, csrfToken);
 			if (loginResponse)
-				handleRedirect('/game');
+				handleRedirect('#game');
 		} catch (error) {
-			console.error('Registration error:', error);
+			// console.error('Registration error:', error);
 			showError(error.message);
 		}
 	});
-});
+	document.addEventListener("keydown", function(event) {
+		if ((event.code === "Enter" || event.code === "NumpadEnter") && getPage() == "register") {
+			event.preventDefault();
+			document.getElementById("register_submit").click();
+		}
+	});
+	
+}

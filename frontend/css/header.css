@@ -2,14 +2,33 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: 'Orbitron', sans-serif;
-	background-color: #000;
+	background: linear-gradient(45deg, #000000, #1a1a1a);
 	color: #fff;
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
 }
 
+.page {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.page.active {
+    display: block;
+    opacity: 1;
+}
+
 .header {
+	display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.header.active {
+	display: block;
+    opacity: 1;
 	background-color: rgba(0, 0, 0, 0.8);
 	padding-top: 1rem;
 	padding-bottom: 1rem;

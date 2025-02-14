@@ -1,31 +1,81 @@
-// Fonction pour charger le contenu selon le hash
-function loadContentFromHash() {
-	const hash = location.hash.slice(1); // Retire le "#"
-	let path = hash || 'game';
-	// Charger le contenu en fonction de 'path'
-	// Par exemple, en utilisant $.load() ou fetch()
-	$('#content').load(path + '.html', function(response, status) {
-	  if (status === "error") {
-		$('#content').html("<p>Error loading page.</p>");
-	  }
+let isPreloaded = 0
+async function loadContentFromHash() {
+	const hash = location.hash.split('?')[0].slice(1) || 'game';
+	document.querySelectorAll(".page").forEach(div => {
+		div.classList.remove("active");
 	});
+	let loadPage = 1;
+	if(hash != "login" && hash != "register"){
+		let result = await loadHeader();
+        if (result === false)
+            loadPage = 0;
+		document.getElementById("header").classList.add("active");
+	} else document.getElementById("header").classList.remove("active");
+	document.title = hash.charAt(0).toUpperCase() + hash.slice(1) + " - PONG"
+	if(isPreloaded == 0 || loadPage == 0)
+		return;
+
+	let pageDiv = document.getElementById(hash);
+	if (pageDiv) {
+		pageDiv.classList.add("active");
+		switch (hash){
+			case "profile": loadProfile();break;
+			case "settings": loadSettings();break;
+			case "game": loadGame();break;
+			case "login": loadLogin();break;
+			case "register": loadRegister();break;
+		}
+	}
 }
-  
-// Navigation en modifiant le hash
+
+function preloadPages() {
+    const pages = ["game", "profile", "settings", "login", "register"];
+    const promises = pages.map(page =>
+        fetch(page + ".html")
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById(page).innerHTML = html;
+            })
+            .catch(error => console.error("Erreur de chargement :", error))
+    );
+	Promise.all(promises).then(() => {
+        console.log("✅ Toutes les pages ont été chargées !");
+		isPreloaded = 1;
+		initHeader();
+		initLogin();
+		initProfile();
+		initGame();
+		initSettings();
+		initRegister();
+
+		loadContentFromHash();
+    });
+}
+
 function navigateTo(path) {
-	location.hash = path;
+    location.hash = path;
 }
-  
-// Écouter l'événement de changement de hash
-window.addEventListener('hashchange', loadContentFromHash);
-  
-// Au chargement de la page
-$(document).ready(function() {
-	loadContentFromHash();
-	// Intercepter les clics sur les liens
-	$(document).on('click', '[data-link]', function(e) {
-	  e.preventDefault();
-	  const url = $(this).attr('href');
-	  navigateTo(url.replace('/', '')); // par exemple: '/page1' => 'page1'
-	});
+
+window.addEventListener("hashchange", loadContentFromHash);
+
+document.addEventListener("DOMContentLoaded", () => {
+    preloadPages();
+    loadContentFromHash();
 });
+
+function updateHashParam(param, value) {
+    let baseHash = location.hash.split('?')[0];
+    let params = new URLSearchParams(location.hash.split('?')[1] || "");
+
+    params.set(param, value);
+    location.hash = baseHash + "?" + params.toString();
+}
+
+function getHashParam(param) {
+    let params = new URLSearchParams(location.hash.split('?')[1] || ""); 
+    return params.get(param);
+}
+
+function getPage(){
+	return (location.hash.split('?')[0].slice(1) || 'game');
+}

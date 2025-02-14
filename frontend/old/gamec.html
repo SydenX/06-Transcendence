@@ -200,7 +200,7 @@
     <script>
         checkAuth().then(isAuthenticated => {
             if(isAuthenticated === false)
-                window.location.href = '/login';
+                window.location.href = '#login';
         });
 
         async function checkAuth() {

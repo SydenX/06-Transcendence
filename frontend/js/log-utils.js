@@ -12,7 +12,7 @@ function showError(message) {
         let jsonObject = JSON.parse(message);
         message = jsonObject.detail;
     }
-	const errorMessage = document.getElementById('errorMessage');
+	const errorMessage = document.getElementById(getPage()+'_errorMessage');
 	errorMessage.textContent = message;
 	errorMessage.style.display = 'block';
 	console.error('Error:', message);
@@ -37,13 +37,14 @@ async function attemptLogin(username, password, csrfToken) {
         console.error('Login Error:', loginResponse.status, errorText);
         throw new Error(errorText);
     }
-
-    const responseData = await loginResponse.json();
-    console.log('Login successful');
-    loadLoginInfos();
-	
-	return true;
+    
+    if (await loadLoginInfos() == true){
+        console.log('Login successful');
+        getid();
+        return true;
+    }
 }
+
 
 function handleRedirect(url) {
     console.log('Redirecting to:', url);
@@ -52,13 +53,13 @@ function handleRedirect(url) {
 
 function isAuthenticated(){
     checkAuth().then(isAuthenticated => {
-        console.log(isAuthenticated);
-		if(isAuthenticated === true){
-        	return true;
+        console.log("a>"+isAuthenticated)
+		if(isAuthenticated == true){
+        	return 1;
 		}
-        return false;
+        return 0;
 	});
-    return false;
+    return 0;
 }
 
 async function checkAuth() {

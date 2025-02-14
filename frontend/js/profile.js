@@ -1,28 +1,136 @@
-// async function displayProfile() {
-//     const user = await getUserData();
-//     if (user) 
-document.getElementById("username").textContent = getCookie("username");
-// }
-// displayProfile()
+async function loadProfile(){
+	console.log("Loading profile.")
 
-// let username = document.getElementById("username").dataset.username;
-// console.log("Username:", username);
+	document.getElementById("profile_container").classList.add("active");
+	if(getHashParam("id") != null){
+		try {
+			const response = await fetch('/api/chat/test/', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+				body: JSON.stringify({ id_user_0: getHashParam("id"), id_user_1: getHashParam("id") })
+			});
+			const data = await response.json();
+			if(data.username != null){
+				document.getElementById("profile_username").textContent = data.username;
+				document.getElementById("profile_not_found_container").classList.remove("active");
+			} else {
+				document.getElementById("profile_container").classList.remove("active");
+				document.getElementById("profile_not_found_container").classList.add("active");
+				document.getElementById("profile_username").textContent = "User not found.";
+			}
+		} catch (error) {
+			console.error('Error :', error);
+		}
+	} else {
+		document.getElementById("profile_not_found_container").classList.remove("active");
+		document.getElementById("profile_username").textContent = getCookie("username");
+	}
+	loadFriendship()
+	loadBlocked()
+}
 
-// var ctx = document.getElementById('winChart').getContext('2d');
-// var winChart = new Chart(ctx, {
-// 	type: 'bar',
-// 	data: {
-// 		labels: ['Wins', 'Losses'],
-// 		datasets: [{
-// 			label: 'Game Stats',
-// 			data: [180, 70],
-// 			backgroundColor: ['#00ff88', '#ff4444'],
-// 			borderColor: ['#00ff88', '#ff4444'],
-// 			borderWidth: 1
-// 		}]
-// 	},
-// 	options: {
-// 		responsive: true,
-// 		plugins: { legend: { display: false } }
-// 	}
-// });
+function initProfile(){
+	console.log("Initializing profile.")
+
+	document.getElementById('profile_friend_manage').addEventListener('click', async () => {
+		let cmd = "add_friend_user";
+		if(document.getElementById("profile_friend_manage").textContent == "Remove friend" || document.getElementById("profile_friend_manage").textContent == "Cancel friend request.")
+			cmd = "delete_friend_user";
+
+        try {
+			let userId = getHashParam("id");
+			if(userId == null)
+				userId = getCookie("id")
+			console.log("Managing friendship with "+ userId);
+
+            const response = await fetch('/api/chat/'+ cmd +'/', {
+                method: 'POST',
+				headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+				body: JSON.stringify({ id_user_0: getCookie("id"), id_user_1: userId })
+            });
+			const data = await response.json();
+			loadFriendship()
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    });
+
+	document.getElementById('profile_block_manage').addEventListener('click', async () => {
+		let cmd = "block_user";
+		if(document.getElementById("profile_block_manage").textContent == "Unblock")
+			cmd = "delete_blocked_user";
+
+        try {
+			let userId = getHashParam("id");
+			if(userId == null)
+				userId = getCookie("id")
+			console.log("Managing block status with "+ userId);
+
+            const response = await fetch('/api/chat/'+ cmd +'/', {
+                method: 'POST',
+				headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+				body: JSON.stringify({ id_user_0: getCookie("id"), id_user_1: userId })
+            });
+			const data = await response.json();
+			if(data.message.includes("removed"))
+				document.getElementById("profile_block_manage").textContent = "Block"
+			else if(data.message.includes("has been blocked"))
+				document.getElementById("profile_block_manage").textContent = "Unblock"
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    });
+}
+
+async function isBlocked(userId) {
+	try {
+		const response = await fetch('/api/chat/get_blocked/', {
+			method: 'GET',
+			headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') }
+		});
+
+		if (!response.ok)
+			throw new Error('Erreur lors de la récupération des utilisateurs bloqués');
+
+		const data = await response.json();
+		const blockedUsers = data.blocked;
+
+		const isBlocked = blockedUsers.some(user => user.id == userId);
+		return isBlocked;
+	} catch (error) {
+		console.error("Erreur :", error);
+	}
+	return false;
+}
+
+async function loadBlocked(){
+	if(await isBlocked(getHashParam("id"))){
+		document.getElementById("profile_block_manage").textContent = "Unblock"
+	} else {
+		document.getElementById("profile_block_manage").textContent = "Block"
+	}
+}
+
+async function loadFriendship(){
+	try {
+		await getid();
+		let userId = getHashParam("id");
+		if(userId == null)
+			userId = getCookie("id")
+		console.log("Checking friendship with id "+ userId);
+
+		const response = await fetch('/api/chat/check_friendship/', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+			body: JSON.stringify({ id_user_0: getCookie("id"), id_user_1: userId })
+		});
+		const data = await response.json();
+		
+		if(data.is_friends == "false" || await isBlocked(getHashParam("id"))) document.getElementById("profile_friend_manage").textContent = "Add friend"
+		else if(data.is_friends == "true") document.getElementById("profile_friend_manage").textContent = "Remove friend"
+		else if(data.is_friends == "pending") document.getElementById("profile_friend_manage").textContent = "Cancel friend request."
+		else if(data.is_friends == "waiting") document.getElementById("profile_friend_manage").textContent = "Accept friend request."
+    } catch (error) {
+        console.error('Error checking auth:', error);
+    }
+}

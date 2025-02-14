@@ -14,7 +14,7 @@ function setupAuthHandlers() {
         console.log('Setting up login button handler...');
         loginBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            window.location.href = '/login';
+            window.location.href = '#login';
         });
     }
     
@@ -76,7 +76,7 @@ async function submitLogin(event) {
         if (response.ok) {
             const data = await response.json();
             localStorage.setItem('user', JSON.stringify(data));
-            window.location.href = '/game';
+            window.location.href = '#game';
         } else {
             const error = await response.json();
             showError(error.detail || 'Login failed');
@@ -121,7 +121,7 @@ async function handleLogout() {
 
         if (response.ok) {
             localStorage.removeItem('user');
-            window.location.href = '/login';
+            window.location.href = '#login';
         } else {
             console.error('Logout failed');
         }
@@ -134,7 +134,7 @@ async function checkAuthStatus() {
     console.log('Checking authentication status...');
     
     // Check if we're on the login page
-    const isLoginPage = window.location.pathname === '/login';
+    const isLoginPage = window.location.pathname === '/#login';
     
     try {
         const response = await fetch('/api/users/profile/', {
@@ -147,7 +147,7 @@ async function checkAuthStatus() {
             
             // If authenticated and on login page, redirect to game
             if (isLoginPage) {
-                window.location.href = '/game';
+                window.location.href = '#game';
                 return;
             }
             
@@ -157,13 +157,13 @@ async function checkAuthStatus() {
             
             // If not authenticated and not on login page, redirect to login
             if (!isLoginPage) {
-                window.location.href = '/login';
+                window.location.href = '#login';
             }
         }
     } catch (error) {
         console.error('Error checking auth status:', error);
         if (!isLoginPage) {
-            window.location.href = '/login';
+            window.location.href = '#login';
         }
     }
 }

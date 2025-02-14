@@ -1,31 +1,9 @@
-checkAuth().then(isAuthenticated => {
-    if(isAuthenticated === false)
-        window.location.href = '/login';
-    else {
-        loadLoginInfos();
-        if (!gameInitialized) {
-            if (document.readyState === 'complete') {
-                console.log('DOM is ready, initializing game after auth');
-                setTimeout(initializeGame, 0);
-            } else {
-                console.log('Waiting for DOM to be ready...');
-                window.addEventListener('load', () => {
-                    console.log('Window loaded, initializing game...');
-                    setTimeout(initializeGame, 0);
-                });
-            }
-        }
-    }
-});
+function loadGame(){
+	console.log("Loading game.")
+}
 
-async function checkAuth() {
-    try {
-        const response = await fetch('/api/users/profile/');
-        return response.ok;
-    } catch (error) {
-        console.error('Error checking auth:', error);
-        return false;
-    }
+function initGame(){
+	console.log("Initializing game.")
 }
 
 let game = null;

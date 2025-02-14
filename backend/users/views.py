@@ -24,6 +24,7 @@ REDIRECT_URI = "http://localhost:8000/auth/callback/"
 TOKEN_URL = "https://api.intra.42.fr/oauth/token"
 USER_INFO_URL = "https://api.intra.42.fr/v2/me"
 
+
 @api_view(["GET"])
 @ensure_csrf_cookie
 @permission_classes([AllowAny])

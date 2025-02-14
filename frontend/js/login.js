@@ -1,22 +1,31 @@
-document.addEventListener('DOMContentLoaded', function() {
+function loadLogin(){
+    console.log("Loading login.")
+    checkAuth().then(isAuthenticated => {
+        console.log("Is user auth? " + isAuthenticated)
+		if(isAuthenticated == true){
+            if(location.hash.slice(1) == "login" || location.hash.slice(1) == "register"){
+                window.location.href = "#game";
+                console.log("Already logged-in -> redirecting to game page.")
+            }
+        	return;
+		}
+	});
+}
 
-	if(isAuthenticated() == true)
-		return;
-
-    const form = document.getElementById('loginForm');
+function initLogin(){
+    console.log("Initializing login.")
     
-    form.addEventListener('submit', async function(event) {
-        event.preventDefault();
-
-        const olog = document.getElementById('clicked_button').value;
-        if (olog === '42log') {
-            event.cancelable = true;
-            window.location.href = "/api/users/oauth_login/";   
-            return;
-        }
-
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value;
+    document.getElementById('login_42log').addEventListener('click', async function(event) {
+        window.location.href = "/api/users/oauth_login/";
+        return;
+    });
+    document.getElementById('login_submit').addEventListener('click', async function(event) {
+        var username = document.getElementById("login_username");
+        if(username != null)
+            username = username.value;
+        var password = document.getElementById('login_password');
+        if(password != null)
+            password = password.value;
 
         if (!username || !password) {
             showError('Please enter both username and password');
@@ -36,23 +45,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (!csrfResponse.ok) {
                 const errorText = await csrfResponse.text();
-                console.error('CSRF Error:', csrfResponse.status, errorText);
+                // console.error('CSRF Error:', csrfResponse.status, errorText);
                 throw new Error('Failed to get CSRF token');
             }
-
+            
             const csrfData = await csrfResponse.json();
             const csrfToken = csrfData.csrfToken;
             console.log('Got CSRF token');
-
 			const loginResponse = await attemptLogin(username, password, csrfToken);
 			if (loginResponse)
-				handleRedirect('/game');
+				handleRedirect('#game');
         } catch (error) {
-            console.error('Login error:', error);
+            // console.error('Login error:', error);
             showError(error.message);
         }
     });
-});
+    document.addEventListener("keydown", function(event) {
+        if ((event.code === "Enter" || event.code === "NumpadEnter") && getPage() == "login") {
+            event.preventDefault();
+            document.getElementById("login_submit").click();
+        }
+    }); 
+};
 
 async function olog() {
     return await fetch('/api/users/oauth_login/', {
@@ -67,7 +81,3 @@ async function olog() {
         body: JSON.stringify({ username, password })
     });
 }
-
-document.getElementById('42log').addEventListener('click', function() {
-    window.location.href = "/api/users/oauth_login/";
-});

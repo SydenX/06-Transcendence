@@ -25,16 +25,39 @@ function deleteAllCookies() {
 }
 
 async function loadLoginInfos(){
-    if(getCookie("username") != null)
-        return;
     try {
         const response = await fetch('/api/users/profile/');
         if (response.ok) {
             const userData = await response.json();
             setCookie("username", userData.username);
             setCookie("avatar", userData.avatar);
+            return true;
         }
     } catch (error) {
         console.error('Error checking auth:', error);
     }
+    return false;
+}
+
+async function checkAuth() {
+    try {
+        const response = await fetch('/api/users/profile/');
+        return response.ok
+    } catch (error) {
+        console.error('Error checking auth:', error);
+        return false;
+    }
+}
+
+async function getid(){
+	try {
+		const response = await fetch('/api/users/user_info/');
+		if (response.ok) {
+			const userData = await response.json();
+			setCookie("id", userData.id);
+            console.log("id = " + userData.id);
+		}
+	} catch (error) {
+		console.error('Error checking auth:', error);
+	}
 }
