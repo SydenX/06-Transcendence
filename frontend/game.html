@@ -1,32 +1,19 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pong Game</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/game.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body> -->
-    <link rel="stylesheet" href="css/game.css">
-
-    <div class="game_container">
-        <div class="game_buttons">
-            <button id="createGameBtn" class="game_btn btn-outline-success">Create Game</button>
-            <button id="joinGameBtn" class="game_btn btn-outline-success">Join Game</button>
-        </div>
-
-        <div id="gameStatus" class="game_game-status"></div>
-
-        <div id="gameCanvasContainer" class="game_canvas-container">
-            <div class="game_score-container">
-                <div id="player1Score">0</div>
-                <div id="player2Score">0</div>
-            </div>
-            <canvas id="gameCanvas"></canvas>
-        </div>
+<div class="game_container">
+    <div class="game_buttons">
+        <button id="game_createGameBtn" class="game_btn">Create Game</button>
+        <button id="game_joinGameBtn" class="game_btn">Join Game</button>
+        <button id="game_createTournamentBtn" class="game_btn">Create Tournament</button>
+        <button id="game_joinTournamentBtn" class="game_btn">Join Tournament</button>
+        <button id="game_playIABtn" class="game_btn">Play against IA</button>
     </div>
-<!-- </body>
-</html> -->
+    
+    <div id="game_Status" class="game_status"></div>
+    
+    <div id="game_CanvasContainer" class="game_canvas-container">
+        <div class="game_score-container">
+            <div id="game_player1Score">0</div>
+            <div id="game_player2Score">0</div>
+        </div>
+        <canvas id="game_Canvas"></canvas>
+    </div>
+</div>

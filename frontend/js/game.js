@@ -4,6 +4,7 @@ function loadGame(){
 
 function initGame(){
 	console.log("Initializing game.")
+    initTournament()
 }
 
 let game = null;

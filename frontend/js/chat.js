@@ -1,6 +1,6 @@
 function loadChat(){
 	console.log("Loading chat.")
-
+	return;
 	fetch("/api/chat/get_friends/", { method: "GET", credentials: "include" })
 	.then(response => response.json())
 	.then(data => {
@@ -147,6 +147,7 @@ function openChat(username, friendId) {
 
 function initChat(){
 	console.log("Initializing chat.")
+	return;
 	initWebSocket()
 
 	let chatContainer = document.getElementById("chat_main_container");
