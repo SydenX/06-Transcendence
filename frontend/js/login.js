@@ -16,49 +16,64 @@ function initLogin(){
     console.log("Initializing login.")
     
     document.getElementById('login_42log').addEventListener('click', async function(event) {
-        window.location.href = "/api/users/oauth_login/";
-        return;
+		checkAuth().then(isAuthenticated => {
+            console.log("Is user auth? " + isAuthenticated)
+            if(isAuthenticated == true){
+                console.log("Already logged-in")
+                return;
+            }
+            window.location.href = "/api/users/oauth_login/";
+        });
     });
     document.getElementById('login_submit').addEventListener('click', async function(event) {
-        var username = document.getElementById("login_username");
-        if(username != null)
-            username = username.value;
-        var password = document.getElementById('login_password');
-        if(password != null)
-            password = password.value;
-
-        if (!username || !password) {
-            showError('Please enter both username and password');
-            return;
-        }
-
-        try {
-            console.log('Fetching CSRF token...');
-            const csrfResponse = await fetch('/api/users/csrf/', {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            });
-
-            if (!csrfResponse.ok) {
-                const errorText = await csrfResponse.text();
-                // console.error('CSRF Error:', csrfResponse.status, errorText);
-                throw new Error('Failed to get CSRF token');
+        async function checkUserAuth() {
+            const isAuthenticated = await checkAuth();
+            console.log("Is user auth? " + isAuthenticated);
+        
+            if (isAuthenticated) {
+                console.log("Already logged-in");
+                return;
             }
-            
-            const csrfData = await csrfResponse.json();
-            const csrfToken = csrfData.csrfToken;
-            console.log('Got CSRF token');
-			const loginResponse = await attemptLogin(username, password, csrfToken);
-			if (loginResponse)
-				handleRedirect('#game');
-        } catch (error) {
-            // console.error('Login error:', error);
-            showError(error.message);
+            var username = document.getElementById("login_username");
+            if(username != null)
+                username = username.value;
+            var password = document.getElementById('login_password');
+            if(password != null)
+                password = password.value;
+    
+            if (!username || !password) {
+                showError('Please enter both username and password');
+                return;
+            }
+    
+            try {
+                console.log('Fetching CSRF token...');
+                const csrfResponse = await fetch('/api/users/csrf/', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+    
+                if (!csrfResponse.ok) {
+                    const errorText = await csrfResponse.text();
+                    throw new Error('Failed to get CSRF token');
+                }
+                
+                const csrfData = await csrfResponse.json();
+                const csrfToken = csrfData.csrfToken;
+                console.log('Got CSRF token');
+                const loginResponse = await attemptLogin(username, password, csrfToken);
+                if (loginResponse)
+                    handleRedirect('#game');
+            } catch (error) {
+                showError(error.message);
+            }
         }
+        
+        checkUserAuth();
     });
     document.addEventListener("keydown", function(event) {
         if ((event.code === "Enter" || event.code === "NumpadEnter") && getPage() == "login") {

@@ -10,10 +10,22 @@ async function loadHeader() {
         return false;
     }
 
-    document.getElementById('header_username').textContent = getCookie("username");
-    document.getElementById('header_userAvatar').textContent = getCookie("avatar");
+    document.getElementById('header_username').textContent = getCookie("username") + "▾";
+    const avatarUrl = "images/logo.jpg";
+    const avatarDiv = document.getElementById("header_userAvatar");
+    avatarDiv.style.backgroundImage = `url('${avatarUrl}')`;
+    // document.getElementById('header_userAvatar').textContent = getCookie("avatar");
 }
 
+function closeMenu(menu){
+    menu.style.display = 'none';
+    document.getElementById('header_username').textContent = getCookie("username") + "▾";
+}
+
+function openMenu(menu){
+    menu.style.display = 'block';
+    document.getElementById('header_username').textContent = getCookie("username") + "▴";
+}
 
 function initHeader(){
     console.log("Initializing header.")
@@ -21,8 +33,8 @@ function initHeader(){
     document.getElementById('header_userButton').addEventListener('click', function() {
         const menu = document.getElementById('header_dropdownMenu');
         if(menu.style.display == 'block' && !menu.matches(':hover'))
-            menu.style.display = 'none';
-        else menu.style.display = 'block';
+            closeMenu(menu);
+        else openMenu(menu);
     });
 
     document.addEventListener('click', function(event) {
@@ -32,18 +44,18 @@ function initHeader(){
 
         elements.forEach(element => {
             if(element.matches(':hover'))
-                menu.style.display = 'none';
+                closeMenu(menu);
         });
         if(document.getElementById("header_logout").matches('hover'))
-            menu.style.display = 'none';
+            closeMenu(menu);
 
         if ((!button.matches(':hover') && !menu.matches(':hover')))
-            menu.style.display = 'none';
+            closeMenu(menu);
     });
 
     document.addEventListener('scroll', function() {
         const menu = document.getElementById('header_dropdownMenu');
-        menu.style.display = 'none';
+        closeMenu(menu);
     });
 
     document.getElementById('header_logout').addEventListener('click', async () => {
