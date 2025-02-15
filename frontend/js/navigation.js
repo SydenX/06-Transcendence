@@ -24,12 +24,14 @@ async function loadContentFromHash() {
 			case "game": loadGame();break;
 			case "login": loadLogin();break;
 			case "register": loadRegister();break;
+
+			case "chat": loadChat();break;
 		}
 	}
 }
 
 function preloadPages() {
-    const pages = ["game", "profile", "settings", "login", "register"];
+    const pages = ["game", "profile", "settings", "login", "register", "chat"];
     const promises = pages.map(page =>
         fetch(page + ".html")
             .then(response => response.text())
@@ -47,6 +49,7 @@ function preloadPages() {
 		initGame();
 		initSettings();
 		initRegister();
+		initChat();
 
 		loadContentFromHash();
     });

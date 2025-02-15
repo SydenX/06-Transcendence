@@ -106,7 +106,7 @@ def add_friend_user(request):
 
     if not id_user_0 or not id_user_1:
         return Response({'error': 'id_user_0 and id_user_1 is required'}, status=status.HTTP_400_BAD_REQUEST)
-    if id_user_0 == id_user_1:
+    if int(id_user_0) == int(id_user_1):
         return Response({'error': 'id_user_0 and id_user_1 must be different'}, status=status.HTTP_400_BAD_REQUEST)
     try:
         user_to_add = User.objects.get(id=id_user_1)
@@ -229,19 +229,16 @@ def check_friendship(request):
         invitation_pending = False
         accept_friend_request = False
 
-        # Vérifie si les deux sont amis (les deux entrées existent)
         if FriendUser.objects.filter(id_user_0=id_user_0, id_user_1=id_user_1).exists() and \
            FriendUser.objects.filter(id_user_0=id_user_1, id_user_1=id_user_0).exists():
             is_friends = True
 
-        # Vérifie si une seule entrée existe (demande d'ami en attente)
         elif FriendUser.objects.filter(id_user_0=id_user_0, id_user_1=id_user_1).exists():
-            invitation_pending = True  # id_user_0 a envoyé une invitation
+            invitation_pending = True
 
         elif FriendUser.objects.filter(id_user_0=id_user_1, id_user_1=id_user_0).exists():
-            accept_friend_request = True  # id_user_1 a envoyé une invitation, id_user_0 doit accepter
+            accept_friend_request = True
 
-        # Retourne l'état de la relation
         if is_friends:
             return Response({"is_friends": "true"}, status=status.HTTP_200_OK)
         elif invitation_pending:

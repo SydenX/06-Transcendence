@@ -1,44 +1,43 @@
 
-<title>Settings - Pong Game</title>
-
-<h1>settings</h1>
-<div class="profile_container">
-    <div class="profile_friends-container">
-        <h2>My Friends</h2>
-        <ul id="friendsList"></ul>
+<div id="settings_container" class="settings_container">
+    <div class="settings_updates_container">
+        <!-- <h2 class="settings_title"></h2> -->
+        
+        <div class="settings_group">
+            <label id="settings_new_username" for="settings_new_username_placeholder" class="settings_label"></label>
+            <input type="text" id="settings_new_username_placeholder" class="settings_input" placeholder="">
+            <button id="settings_change_username" class="settings_profile"></button>
+        </div>
+    
+        <div class="settings_group">
+            <label id="settings_new_password" for="settings_new_password_placeholder" class="settings_label"></label>
+            <input type="password" id="settings_new_password_placeholder" class="settings_input" placeholder="">
+            <label id="settings_confirm_password" for="settings_confirm_password_placeholder" class="settings_label"></label>
+            <input type="password" id="settings_confirm_password_placeholder" class="settings_input" placeholder="">
+            <button id="settings_change_password" class="settings_profile"></button>
+        </div>
     </div>
 
-    <div class="profile_added-container">
-        <h2>Add Friends</h2>
-        <ul id="addedList"></ul>
-        <button class="profile_button" onclick="addFriend()">Add</button>
-        <input class="profile_input" type="text" id="friendInput" placeholder="Type the name of a friend">
+    <div class="settings_buttons_container">
+        
+        <div class="settings_group">
+            <label id="settings_language_title" class="settings_label"></label>
+            <div class="settings_language-toggle">
+                <button id="settings_lang_fr" class="settings_language_btn">Français</button>
+                <button id="settings_lang_en" class="settings_language_btn active">English</button>
+            </div>
+        </div>
+
+        <div class="settings_group">
+            <label id="settings_42_account_title" class="settings_label"></label>
+            <button id="settings_42_account_link" class="settings_language_btn"></button>
+        </div>
+
+        <div class="settings_group">
+            <label id="settings_users_blocked_title" class="settings_label"></label>
+            <div class="settings_updates_container"></div>
+        </div>
+
     </div>
-    <div class="profile_blocked-container">
-        <h2>Blocked</h2>
-        <ul id="blockedList"></ul>
-    </div>
+    
 </div>
-
-<div class="profile_chat-container">
-    <h2>Chat</h2>
-    <select id="friendSelect">
-        <option value="">Select a friend</option>
-    </select>
-    <div class="profile_message-input">
-        <button class="profile_button" onclick="sendMessage()">Send</button>
-        <input class="profile_input" type="text" id="messageInput" placeholder="Type a message">
-    </div>
-    <h3>Messages</h3>
-    <div id="messageList" class="profile_message-list"></div>
-</div>
-
-<div id="friendOptions" class="profile_friend-options">
-    <button class="profile_button" onclick="removeFriend()">Remove Friend</button>
-    <button class="profile_button" onclick="blockFriend()">Block</button>
-</div>
-
-<div id="blockedOptions" class="profile_blocked-options">
-    <button class="profile_button" onclick="unblockUser()">Unblock</button>
-</div>
-

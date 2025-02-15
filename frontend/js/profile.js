@@ -16,7 +16,7 @@ async function loadProfile(){
 			} else {
 				document.getElementById("profile_container").classList.remove("active");
 				document.getElementById("profile_not_found_container").classList.add("active");
-				document.getElementById("profile_username").textContent = "User not found.";
+				document.getElementById("profile_username").textContent = getTranslation("profile_user_not_found");
 			}
 		} catch (error) {
 			console.error('Error :', error);
@@ -34,7 +34,8 @@ function initProfile(){
 
 	document.getElementById('profile_friend_manage').addEventListener('click', async () => {
 		let cmd = "add_friend_user";
-		if(document.getElementById("profile_friend_manage").textContent == "Remove friend" || document.getElementById("profile_friend_manage").textContent == "Cancel friend request.")
+		if(document.getElementById("profile_friend_manage").textContent == getTranslation("profile_friend_manage_pending")
+		|| document.getElementById("profile_friend_manage").textContent == getTranslation("profile_friend_manage_remove"))
 			cmd = "delete_friend_user";
 
         try {
@@ -57,7 +58,7 @@ function initProfile(){
 
 	document.getElementById('profile_block_manage').addEventListener('click', async () => {
 		let cmd = "block_user";
-		if(document.getElementById("profile_block_manage").textContent == "Unblock")
+		if(document.getElementById("profile_block_manage").textContent == getTranslation("profile_block_manage_unblock"))
 			cmd = "delete_blocked_user";
 
         try {
@@ -73,9 +74,9 @@ function initProfile(){
             });
 			const data = await response.json();
 			if(data.message.includes("removed"))
-				document.getElementById("profile_block_manage").textContent = "Block"
+				document.getElementById("profile_block_manage").textContent = getTranslation("profile_block_manage_block")
 			else if(data.message.includes("has been blocked"))
-				document.getElementById("profile_block_manage").textContent = "Unblock"
+				document.getElementById("profile_block_manage").textContent = getTranslation("profile_block_manage_unblock")
         } catch (error) {
             console.error('Error logging out:', error);
         }
@@ -105,9 +106,9 @@ async function isBlocked(userId) {
 
 async function loadBlocked(){
 	if(await isBlocked(getHashParam("id"))){
-		document.getElementById("profile_block_manage").textContent = "Unblock"
+		document.getElementById("profile_block_manage").textContent = getTranslation("profile_block_manage_unblock")
 	} else {
-		document.getElementById("profile_block_manage").textContent = "Block"
+		document.getElementById("profile_block_manage").textContent = getTranslation("profile_block_manage_block")
 	}
 }
 
@@ -126,10 +127,10 @@ async function loadFriendship(){
 		});
 		const data = await response.json();
 		
-		if(data.is_friends == "false" || await isBlocked(getHashParam("id"))) document.getElementById("profile_friend_manage").textContent = "Add friend"
-		else if(data.is_friends == "true") document.getElementById("profile_friend_manage").textContent = "Remove friend"
-		else if(data.is_friends == "pending") document.getElementById("profile_friend_manage").textContent = "Cancel friend request."
-		else if(data.is_friends == "waiting") document.getElementById("profile_friend_manage").textContent = "Accept friend request."
+		if(data.is_friends == "false" || await isBlocked(getHashParam("id"))) document.getElementById("profile_friend_manage").textContent = getTranslation("profile_friend_manage_add")
+		else if(data.is_friends == "true") document.getElementById("profile_friend_manage").textContent = getTranslation("profile_friend_manage_remove")
+		else if(data.is_friends == "pending") document.getElementById("profile_friend_manage").textContent = getTranslation("profile_friend_manage_pending")
+		else if(data.is_friends == "waiting") document.getElementById("profile_friend_manage").textContent = getTranslation("profile_friend_manage_accept")
     } catch (error) {
         console.error('Error checking auth:', error);
     }
